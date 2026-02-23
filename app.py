@@ -78,4 +78,5 @@ demo = gr.Interface(
     description="Fine-tuned Medical LLM for Chest & Bone Radiographs."
 )
 
-
+if __name__ == "__main__":
+    demo.launch()
