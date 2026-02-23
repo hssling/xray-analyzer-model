@@ -45,7 +45,7 @@ def main():
     model = get_peft_model(model, lora_config)
     
     print(f"Loading dataset: {DATASET_ID}")
-    dataset = load_dataset(DATASET_ID, split="train[:1000]") # Using subset of 10k for speed
+    dataset = load_dataset(DATASET_ID, split="train") # Using the full 10k dataset for extensive training
     
     def format_data(example):
         findings = example.get("findings") or example.get("text") or example.get("description") or "Chest X-Ray findings."
@@ -78,10 +78,9 @@ def main():
         per_device_train_batch_size=2,
         gradient_accumulation_steps=4,
         learning_rate=2e-4,
-        logging_steps=10,
-        max_steps=150, 
-        save_strategy="steps",
-        save_steps=50,
+        logging_steps=50,
+        num_train_epochs=3, # Train extensively across the entire 10k dataset 3 times
+        save_strategy="epoch", # Save at the end of every epoch
         fp16=True,
         optim="paged_adamw_8bit",
         remove_unused_columns=False,
